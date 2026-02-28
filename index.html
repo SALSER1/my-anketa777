@@ -1,301 +1,248 @@
 <!DOCTYPE html>
-<html lang="kk">
+<html lang="ru">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ORDO AI | Future Terminal v2.0</title>
-    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Montserrat:wght@300;500&display=swap" rel="stylesheet">
+    <title>Zen Form | Minimal & Dynamic</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
     
     <style>
+        /* Определение переменных для обеих тем */
         :root {
-            --neon-cyan: #00f2ff;
-            --neon-purple: #bc13fe;
-            --dark-bg: #050505;
-            --glass: rgba(255, 255, 255, 0.05);
-            --error-red: #ff3131;
+            --bg: #f5f5f7;
+            --card-bg: #ffffff;
+            --text-main: #1d1d1f;
+            --text-secondary: #86868b;
+            --accent: #0071e3;
+            --input-bg: #f5f5f7;
+            --border: #d2d2d7;
+            --btn-text: #ffffff;
+            --transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
-        * { box-sizing: border-box; cursor: crosshair; }
+        [data-theme="dark"] {
+            --bg: #000000;
+            --card-bg: #1c1c1e;
+            --text-main: #f5f5f7;
+            --text-secondary: #a1a1a6;
+            --accent: #0a84ff;
+            --input-bg: #2c2c2e;
+            --border: #3a3a3c;
+            --btn-text: #ffffff;
+        }
+
+        * { box-sizing: border-box; -webkit-font-smoothing: antialiased; }
 
         body {
-            margin: 0;
-            padding: 20px;
-            background: var(--dark-bg);
-            color: white;
-            font-family: 'Montserrat', sans-serif;
+            margin: 0; padding: 20px;
+            background-color: var(--bg);
+            color: var(--text-main);
+            font-family: 'Inter', sans-serif;
+            display: flex; justify-content: center; align-items: center;
             min-height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            overflow-x: hidden;
-            background-image: 
-                radial-gradient(circle at 10% 20%, rgba(0, 242, 255, 0.1) 0%, transparent 20%),
-                radial-gradient(circle at 80% 80%, rgba(188, 19, 254, 0.1) 0%, transparent 20%);
+            transition: background-color var(--transition);
         }
 
-        /* Негізгі Контейнер */
-        .ai-container {
-            position: relative;
-            width: 100%;
-            max-width: 500px;
-            background: var(--glass);
-            backdrop-filter: blur(25px);
-            border: 1px solid rgba(0, 242, 255, 0.3);
-            border-radius: 20px;
-            padding: 40px;
-            box-shadow: 0 0 40px rgba(0, 0, 0, 0.8), inset 0 0 20px rgba(0, 242, 255, 0.05);
+        /* Кнопка переключения темы */
+        .theme-toggle {
+            position: fixed; top: 20px; right: 20px;
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            width: 44px; height: 44px;
+            border-radius: 12px;
+            cursor: pointer;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 20px;
+            color: var(--text-main);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+            transition: var(--transition);
+            z-index: 1000;
         }
 
-        /* Сканерлеу сызығы */
-        .ai-container::before {
-            content: '';
-            position: absolute;
-            top: 0; left: 0; width: 100%; height: 2px;
-            background: linear-gradient(90deg, transparent, var(--neon-cyan), transparent);
-            animation: scanning 4s linear infinite;
+        .container {
+            width: 100%; max-width: 400px;
+            background: var(--card-bg);
+            padding: 40px; border-radius: 30px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.05);
+            transition: var(--transition);
         }
 
-        @keyframes scanning {
-            0% { transform: translateY(0); opacity: 0; }
-            50% { opacity: 1; }
-            100% { transform: translateY(500px); opacity: 0; }
-        }
+        h2 { font-size: 24px; font-weight: 600; margin-bottom: 8px; text-align: center; }
+        p.subtitle { color: var(--text-secondary); font-size: 14px; text-align: center; margin-bottom: 32px; }
 
-        h2 {
-            font-family: 'Orbitron', sans-serif;
-            text-transform: uppercase;
-            letter-spacing: 5px;
-            text-align: center;
-            color: var(--neon-cyan);
-            text-shadow: 0 0 15px var(--neon-cyan);
-            margin-bottom: 30px;
-        }
-
-        .form-group { margin-bottom: 20px; position: relative; }
-
-        label {
-            font-size: 10px;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            color: var(--neon-purple);
-            margin-bottom: 8px;
-            display: block;
-        }
+        .form-group { margin-bottom: 20px; }
+        label { display: block; font-size: 13px; font-weight: 500; margin-bottom: 8px; }
 
         input, textarea {
-            width: 100%;
-            background: rgba(0, 0, 0, 0.7);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-left: 3px solid var(--neon-purple);
-            padding: 12px 15px;
-            color: var(--neon-cyan);
-            font-family: 'Orbitron', sans-serif;
-            font-size: 13px;
-            outline: none;
-            transition: 0.3s;
-            border-radius: 4px;
+            width: 100%; padding: 14px 16px;
+            background: var(--input-bg);
+            border: 1px solid transparent; border-radius: 14px;
+            font-size: 15px; font-family: inherit; color: var(--text-main);
+            outline: none; transition: var(--transition);
         }
 
         input:focus, textarea:focus {
-            border-color: var(--neon-cyan);
-            box-shadow: 0 0 15px rgba(0, 242, 255, 0.3);
-            background: rgba(0, 242, 255, 0.1);
+            background: var(--card-bg);
+            border-color: var(--accent);
+            box-shadow: 0 0 0 4px rgba(0, 132, 255, 0.15);
         }
 
-        .ai-hint {
-            font-size: 9px;
-            color: var(--neon-cyan);
-            margin-top: 5px;
-            height: 12px;
-            font-family: 'Orbitron', sans-serif;
-            letter-spacing: 1px;
+        /* Переключатель пола */
+        .gender-group { display: flex; gap: 10px; }
+        .gender-option { flex: 1; position: relative; }
+        .gender-option input { position: absolute; opacity: 0; }
+        .gender-label {
+            display: block; text-align: center; padding: 12px;
+            background: var(--input-bg); border-radius: 12px;
+            font-size: 14px; cursor: pointer; transition: var(--transition);
+        }
+        .gender-option input:checked + .gender-label {
+            background: var(--accent); color: white;
         }
 
-        .gender-box { display: flex; gap: 20px; margin-top: 5px; }
-        .gender-box label {
-            color: white; font-size: 11px; cursor: pointer;
-            display: flex; align-items: center; gap: 8px;
+        .ai-hint { font-size: 11px; color: var(--accent); margin-top: 6px; height: 14px; }
+
+        button.submit-btn {
+            width: 100%; padding: 16px;
+            background: var(--text-main); color: var(--card-bg);
+            border: none; border-radius: 16px;
+            font-size: 16px; font-weight: 600;
+            cursor: pointer; transition: var(--transition);
+            margin-top: 10px;
         }
 
-        .btn-glow {
-            width: 100%;
-            padding: 15px;
-            margin-top: 20px;
-            background: transparent;
-            border: 1px solid var(--neon-cyan);
-            color: var(--neon-cyan);
-            font-family: 'Orbitron', sans-serif;
-            font-weight: bold;
-            text-transform: uppercase;
-            letter-spacing: 3px;
-            cursor: pointer;
-            transition: 0.4s;
-            position: relative;
-        }
+        button.submit-btn:hover { transform: translateY(-2px); filter: brightness(1.1); }
 
-        .btn-glow:hover {
-            background: var(--neon-cyan);
-            color: black;
-            box-shadow: 0 0 30px var(--neon-cyan);
-        }
-
-        .btn-glow:disabled {
-            border-color: #555;
-            color: #555;
-            cursor: not-allowed;
-        }
-
-        #success-screen {
-            display: none;
-            text-align: center;
-            animation: fadeIn 0.8s ease-out;
-        }
-
-        @keyframes fadeIn { from { opacity: 0; transform: scale(0.9); } to { opacity: 1; transform: scale(1); } }
+        #success-msg { display: none; text-align: center; animation: slideUp 0.5s ease; }
+        @keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
     </style>
 </head>
-<body>
+<body data-theme="light">
 
-    <div class="ai-container">
-        <div id="form-ui">
-            <h2>System Login</h2>
-            
-            <form id="aiForm">
-                <div class="form-group">
-                    <label>Subject Identification (Name)</label>
-                    <input type="text" id="fullname" placeholder="ENTER_NAME" required autocomplete="off">
-                    <div id="ai-gender-status" class="ai-hint"></div>
+<button class="theme-toggle" id="themeBtn">🌓</button>
+
+<div class="container">
+    <div id="form-content">
+        <h2>Анкета</h2>
+        <p class="subtitle">Интеллектуальная форма данных</p>
+        
+        <form id="minimalForm">
+            <div class="form-group">
+                <label>Ваше имя</label>
+                <input type="text" id="fullname" placeholder="ФИО" required autocomplete="off">
+                <div id="ai-hint" class="ai-hint"></div>
+            </div>
+
+            <div class="form-group">
+                <label>Биологический пол</label>
+                <div class="gender-group">
+                    <label class="gender-option">
+                        <input type="radio" name="gender" value="Мужской" id="m">
+                        <span class="gender-label">Мужской</span>
+                    </label>
+                    <label class="gender-option">
+                        <input type="radio" name="gender" value="Женский" id="f">
+                        <span class="gender-label">Женский</span>
+                    </label>
                 </div>
+            </div>
 
-                <div class="form-group">
-                    <label>Biological Class</label>
-                    <div class="gender-box">
-                        <label><input type="radio" name="gender" value="Ер" id="m"> MALE</label>
-                        <label><input type="radio" name="gender" value="Әйел" id="f"> FEMALE</label>
-                    </div>
-                </div>
+            <div class="form-group">
+                <label>Дата рождения</label>
+                <input type="date" id="birthdate" required>
+            </div>
 
-                <div class="form-group">
-                    <label>Chronology (Birth Date)</label>
-                    <input type="date" id="birthdate" required>
-                </div>
+            <div class="form-group">
+                <label>Адрес</label>
+                <textarea id="address" rows="2" placeholder="Место жительства"></textarea>
+            </div>
 
-                <div class="form-group">
-                    <label>Grid Coordinates (Address)</label>
-                    <textarea id="address" rows="2" placeholder="LOCATING_STREET..."></textarea>
-                    <div id="ai-addr-status" class="ai-hint"></div>
-                </div>
+            <div class="form-group">
+                <label>Контактный телефон</label>
+                <input type="tel" id="phone" placeholder="+7 777 000 00 00" required>
+            </div>
 
-                <div class="form-group">
-                    <label>Comm Link (Phone)</label>
-                    <input type="tel" id="phone" placeholder="+7 --- --- -- --" required>
-                </div>
-
-                <button type="submit" class="btn-glow" id="submitBtn">Execute Transfer</button>
-            </form>
-        </div>
-
-        <div id="success-screen">
-            <div style="font-size: 50px; color: var(--neon-cyan); margin-bottom: 20px;">⚡</div>
-            <h1 style="color: var(--neon-cyan); font-family: 'Orbitron'; font-size: 20px;">UPLINK SUCCESSFUL</h1>
-            <p id="user-greeting" style="letter-spacing: 2px; font-size: 14px; color: var(--neon-purple);"></p>
-            <p style="font-size: 10px; opacity: 0.5; margin-top: 30px;">All data has been encrypted and routed to secure servers.</p>
-            <button onclick="location.reload()" class="btn-glow" style="border-color: var(--neon-purple); color: var(--neon-purple); font-size: 10px;">Return to Terminal</button>
-        </div>
+            <button type="submit" class="submit-btn" id="submitBtn">Отправить</button>
+        </form>
     </div>
 
-    <script>
-        // БОТ ПАРАМЕТРЛЕРІ
-        const BOT_TOKEN = "8318823337:AAGuEkJX6nXsf16x9OZ-yd0V0L2LvMUb8F8";
-        const CHAT_ID = "871666479";
+    <div id="success-msg">
+        <div style="font-size: 50px; margin-bottom: 10px;">✨</div>
+        <h2>Успешно</h2>
+        <p class="subtitle">Ваши данные синхронизированы.</p>
+        <button onclick="location.reload()" class="submit-btn">Вернуться</button>
+    </div>
+</div>
 
-        // ДЫБЫСТЫҚ ЭФФЕКТІЛЕР (Mixkit ашық кітапханасынан)
-        const sfxHover = new Audio('https://assets.mixkit.co/active_storage/sfx/2571/2571-preview.mp3');
-        const sfxSuccess = new Audio('https://assets.mixkit.co/active_storage/sfx/1435/1435-preview.mp3');
-        const sfxClick = new Audio('https://www.soundjay.com/buttons/sounds/button-10.mp3');
-        sfxHover.volume = 0.2;
+<script>
+    const BOT_TOKEN = "8318823337:AAGuEkJX6nXsf16x9OZ-yd0V0L2LvMUb8F8";
+    const CHAT_ID = "871666479";
 
-        // 1. АВТО-ЖЫНЫС ЖӘНЕ ЖАЗУ ДЫБЫСЫ
-        document.getElementById('fullname').addEventListener('input', (e) => {
-            const name = e.target.value.toLowerCase();
-            const status = document.getElementById('ai-gender-status');
-            
-            // Пернетақта дыбысының имитациясы
-            const t = new Audio('https://www.soundjay.com/buttons/sounds/button-50.mp3');
-            t.volume = 0.05; t.play();
+    // 1. Переключатель тем
+    const themeBtn = document.getElementById('themeBtn');
+    const body = document.body;
 
-            if(name.match(/(қызы|кызы|ева|ина|ична)$/)) {
-                document.getElementById('f').checked = true;
-                status.innerText = "> GENDER_SIGNAL: FEMALE_DETECTED";
-            } else if(name.match(/(ұлы|улы|ев|ин|ич)$/)) {
-                document.getElementById('m').checked = true;
-                status.innerText = "> GENDER_SIGNAL: MALE_DETECTED";
-            } else {
-                status.innerText = "> SCANNING_IDENTITY...";
-            }
-        });
+    themeBtn.addEventListener('click', () => {
+        const currentTheme = body.getAttribute('data-theme');
+        const newTheme = currentTheme === 'light' ? 'dark' : 'light';
+        body.setAttribute('data-theme', newTheme);
+        themeBtn.innerText = newTheme === 'light' ? '🌓' : '☀️';
+        localStorage.setItem('theme', newTheme);
+    });
 
-        // 2. БАТЫРМАЛАРҒА HOVER ДЫБЫСЫ
-        document.querySelectorAll('.btn-glow').forEach(b => {
-            b.addEventListener('mouseenter', () => sfxHover.play());
-        });
+    // Сохранение выбора пользователя
+    if(localStorage.getItem('theme') === 'dark') {
+        body.setAttribute('data-theme', 'dark');
+        themeBtn.innerText = '☀️';
+    }
 
-        // 3. ФОРМАНЫ ЖІБЕРУ (MAIN LOGIC)
-        document.getElementById('aiForm').addEventListener('submit', async (e) => {
-            e.preventDefault();
-            const btn = document.getElementById('submitBtn');
-            const addrStatus = document.getElementById('ai-addr-status');
-            
-            btn.innerText = "ENCRYPTING...";
-            btn.disabled = true;
-            sfxClick.play();
+    // 2. ИИ Логика (Определение пола)
+    document.getElementById('fullname').addEventListener('input', (e) => {
+        const val = e.target.value.toLowerCase();
+        const hint = document.getElementById('ai-hint');
+        if (val.match(/(овна|евна|ична|кызы|ева|ина|ая)$/)) {
+            document.getElementById('f').checked = true;
+            hint.innerText = "ИИ: Обнаружен женский пол";
+        } else if (val.match(/(ович|евич|ич|улы|ұлы|ев|ин|ый)$/)) {
+            document.getElementById('m').checked = true;
+            hint.innerText = "ИИ: Обнаружен мужской пол";
+        } else {
+            hint.innerText = "";
+        }
+    });
 
-            const name = document.getElementById('fullname').value;
-            const bday = document.getElementById('birthdate').value;
-            const gender = document.querySelector('input[name="gender"]:checked')?.value || "UNKNOWN";
-            const addr = document.getElementById('address').value;
-            const phone = document.getElementById('phone').value;
+    // 3. Отправка в Telegram
+    document.getElementById('minimalForm').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const btn = document.getElementById('submitBtn');
+        btn.innerText = "Синхронизация...";
+        btn.disabled = true;
 
-            addrStatus.innerText = "> VALIDATING_COORDINATES...";
+        const data = {
+            name: document.getElementById('fullname').value,
+            gender: document.querySelector('input[name="gender"]:checked')?.value || "Не указан",
+            date: document.getElementById('birthdate').value,
+            addr: document.getElementById('address').value,
+            phone: document.getElementById('phone').value
+        };
 
-            // Telegram Хабарламасы
-            const text = `
-<b>🛸 NEURAL LINK INCOMING</b>
-━━━━━━━━━━━━━
-👤 <b>SUBJECT:</b> <code>${name}</code>
-🚻 <b>BIO_CLASS:</b> ${gender}
-📅 <b>CHRONO:</b> ${bday}
-📞 <b>COMMS:</b> <code>${phone}</code>
-🏠 <b>LOCATION:</b> <i>${addr || 'NOT_SPECIFIED'}</i>
-━━━━━━━━━━━━━
-<b>STATUS: DATA_VERIFIED_OK</b>`;
+        const text = `📬 <b>Минималистичная анкета</b>\n\n👤 Имя: ${data.name}\n🚻 Пол: ${data.gender}\n📅 Дата: ${data.date}\n🏠 Адрес: ${data.addr}\n📞 Тел: ${data.phone}`;
 
-            try {
-                const response = await fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({
-                        chat_id: CHAT_ID,
-                        parse_mode: 'html',
-                        text: text
-                    })
-                });
+        try {
+            await fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ chat_id: CHAT_ID, parse_mode: 'html', text: text })
+            });
+            document.getElementById('form-content').style.display = 'none';
+            document.getElementById('success-msg').style.display = 'block';
+        } catch (err) {
+            alert("Ошибка сети. Попробуйте еще раз.");
+            btn.disabled = false;
+            btn.innerText = "Отправить";
+        }
+    });
+</script>
 
-                if (response.ok) {
-                    sfxSuccess.play();
-                    document.getElementById('form-ui').style.display = 'none';
-                    document.getElementById('success-screen').style.display = 'block';
-                    document.getElementById('user-greeting').innerText = `WELCOME TO THE GRID, ${name.toUpperCase()}`;
-                } else {
-                    throw new Error();
-                }
-            } catch (err) {
-                alert("CRITICAL ERROR: UPLINK FAILED. CHECK CONNECTION.");
-                btn.disabled = false;
-                btn.innerText = "RETRY TRANSFER";
-                addrStatus.innerText = "> ERROR_RETRY_REQUIRED";
-            }
-        });
-    </script>
 </body>
 </html>
